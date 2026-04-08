@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 
 const navLinks = [
@@ -140,6 +141,7 @@ function SocialIcon({ type }: { type: "github" | "linkedin" | "mail" }) {
 export default function Home() {
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
+  const [isProfileFlipped, setIsProfileFlipped] = useState(false);
   const projectsSectionRef = useRef<HTMLElement | null>(null);
   const scrollLockTimestampRef = useRef(0);
   const touchStartYRef = useRef<number | null>(null);
@@ -276,8 +278,8 @@ export default function Home() {
 
       <header className="site-header">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 sm:px-6 lg:px-8">
-          <a href="#top" className="brand-mark">
-            NZ
+          <a href="#top" className="brand-mark" aria-label="Back to top">
+            <Image src="/Image.png" alt="Nimil Zubair" fill className="brand-image" sizes="64px" priority />
           </a>
 
           <nav className="hidden items-center gap-7 md:flex">
@@ -352,38 +354,58 @@ export default function Home() {
           </div>
 
           <aside className="fade-up hero-card p-8" style={{ animationDelay: "0.2s" }}>
-            <div className="flex items-start justify-between gap-4">
-              <div>
-                <SectionLabel>Profile</SectionLabel>
-                <h2 className="mt-4 text-3xl font-semibold">Nimil Zubair</h2>
-                <p className="mt-2 text-[color:var(--muted)]">Software Developer · Full-Stack · Blockchain</p>
-              </div>
-              <div className="rounded-2xl border px-3 py-2 text-right text-xs text-[color:var(--muted)]">
-                Available for
-                <br />
-                opportunities
-              </div>
-            </div>
+            <button
+              type="button"
+              className="flip-toggle"
+              onClick={() => setIsProfileFlipped((current) => !current)}
+              aria-pressed={isProfileFlipped}
+              aria-label="Flip profile card"
+            >
+              {isProfileFlipped ? "Show profile" : "Flip to image"}
+            </button>
 
-            <div className="mt-8 space-y-3 text-sm text-[color:var(--muted)]">
-              <p>FAST-NUCES Karachi · Expected June 2026</p>
-              <p>Karachi, Pakistan</p>
-              <p>nimilzubair1@gmail.com</p>
-            </div>
-
-            <div className="mt-8 rounded-3xl border p-4">
-              <div className="text-sm uppercase tracking-[0.2em] text-[color:var(--muted)]">Core Focus</div>
-              <div className="mt-4 space-y-3">
-                {[
-                  "Production Next.js and React interfaces",
-                  "RESTful APIs and backend services",
-                  "Blockchain and AI-assisted systems",
-                ].map((item) => (
-                  <div key={item} className="flex items-center gap-3">
-                    <span className="inline-flex h-2.5 w-2.5 rounded-full bg-[color:var(--accent)]" />
-                    <span>{item}</span>
+            <div className="profile-flip-wrap mt-4">
+              <div className={`profile-flip-inner ${isProfileFlipped ? "is-flipped" : ""}`}>
+                <div className="profile-face profile-front">
+                  <div className="flex items-start justify-between gap-4">
+                    <div>
+                      <SectionLabel>Profile</SectionLabel>
+                      <h2 className="mt-4 text-3xl font-semibold">Nimil Zubair</h2>
+                      <p className="mt-2 text-[color:var(--muted)]">Software Developer · Full-Stack · Blockchain</p>
+                    </div>
+                    <div className="rounded-2xl border px-3 py-2 text-right text-xs text-[color:var(--muted)]">
+                      Available for
+                      <br />
+                      opportunities
+                    </div>
                   </div>
-                ))}
+
+                  <div className="mt-8 space-y-3 text-sm text-[color:var(--muted)]">
+                    <p>FAST-NUCES Karachi · Expected June 2026</p>
+                    <p>Karachi, Pakistan</p>
+                    <p>nimilzubair1@gmail.com</p>
+                  </div>
+
+                  <div className="mt-8 rounded-3xl border p-4">
+                    <div className="text-sm uppercase tracking-[0.2em] text-[color:var(--muted)]">Core Focus</div>
+                    <div className="mt-4 space-y-3">
+                      {[
+                        "Production Next.js and React interfaces",
+                        "RESTful APIs and backend services",
+                        "Blockchain and AI-assisted systems",
+                      ].map((item) => (
+                        <div key={item} className="flex items-center gap-3">
+                          <span className="inline-flex h-2.5 w-2.5 rounded-full bg-[color:var(--accent)]" />
+                          <span>{item}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+
+                <div className="profile-face profile-back">
+                  <Image src="/Image.png" alt="Nimil Zubair portrait" fill className="profile-back-image" sizes="(max-width: 1024px) 90vw, 420px" />
+                </div>
               </div>
             </div>
           </aside>

@@ -110,17 +110,23 @@ section {
 }
 
 .brand-mark {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 2.75rem;
-  width: 2.75rem;
+  height: 3.6rem;
+  width: 3.6rem;
   border-radius: 9999px;
   border: 1px solid var(--border);
   background: var(--surface);
   box-shadow: var(--shadow);
-  font-weight: 700;
-  letter-spacing: 0.08em;
+  overflow: hidden;
+}
+
+.brand-image {
+  object-fit: cover;
+  transform: scale(1.26);
+  transform-origin: center;
 }
 
 .nav-link {
@@ -213,6 +219,63 @@ section {
 .stat-card {
   border-radius: 1.5rem;
   padding: 1rem 1.15rem;
+}
+
+.flip-toggle {
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  background: var(--surface-strong);
+  padding: 0.45rem 0.9rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  color: var(--muted);
+  transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+}
+
+.flip-toggle:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--accent) 56%, var(--border));
+  color: var(--foreground);
+}
+
+.profile-flip-wrap {
+  perspective: 1400px;
+  min-height: 27rem;
+}
+
+.profile-flip-inner {
+  position: relative;
+  min-height: 27rem;
+  transform-style: preserve-3d;
+  transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.profile-flip-inner.is-flipped {
+  transform: rotateY(180deg);
+}
+
+.profile-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+}
+
+.profile-front {
+  position: relative;
+}
+
+.profile-back {
+  border-radius: 1.5rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  background: var(--surface-strong);
+  transform: rotateY(180deg);
+}
+
+.profile-back-image {
+  object-fit: cover;
+  object-position: center 22%;
 }
 
 .skill-pill {
@@ -430,5 +493,10 @@ section {
 
   .project-sticky-wrap {
     position: static;
+  }
+
+  .profile-flip-wrap,
+  .profile-flip-inner {
+    min-height: 24rem;
   }
 }
