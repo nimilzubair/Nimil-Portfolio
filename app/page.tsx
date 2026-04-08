@@ -488,7 +488,6 @@ export default function Home() {
           <div className="fade-up mb-10" style={{ animationDelay: "0.05s" }}>
             <SectionLabel>Projects</SectionLabel>
             <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
-              <h2 className="text-3xl font-semibold sm:text-4xl">Scroll to switch projects</h2>
               <span className="project-counter">{projectCountLabel}</span>
             </div>
             <p className="mt-3 max-w-2xl text-[color:var(--muted)]">
@@ -575,7 +574,7 @@ export default function Home() {
               <a href="mailto:nimilzubair1@gmail.com" className="primary-button">
                 nimilzubair1@gmail.com
               </a>
-              <a href="https://www.linkedin.com/in/nimil-zubair" target="_blank" rel="noopener noreferrer" className="secondary-button">
+              <a href="https://www.linkedin.com/in/nimil-zubair-b4bb39296" target="_blank" rel="noopener noreferrer" className="secondary-button">
                 LinkedIn Profile
               </a>
             </div>
@@ -584,7 +583,7 @@ export default function Home() {
               <a href="https://github.com/nimilzubair" target="_blank" rel="noopener noreferrer" className="icon-link">
                 <SocialIcon type="github" />
               </a>
-              <a href="https://www.linkedin.com/in/nimil-zubair" target="_blank" rel="noopener noreferrer" className="icon-link">
+              <a href="https://www.linkedin.com/in/nimil-zubair-b4bb39296" target="_blank" rel="noopener noreferrer" className="icon-link">
                 <SocialIcon type="linkedin" />
               </a>
               <a href="mailto:nimilzubair1@gmail.com" className="icon-link">
