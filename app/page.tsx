@@ -464,16 +464,14 @@ export default function Home() {
             <div className="profile-flip-wrap mt-3 sm:mt-4 lg:mt-3">
               <div className={`profile-flip-inner ${isProfileFlipped ? "is-flipped" : ""}`}>
                 <div className="profile-face profile-front">
-                  <div className="flex items-start justify-between gap-4">
+                  <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                     <div>
                       <SectionLabel>Profile</SectionLabel>
                       <h2 className="mt-3 text-2xl font-semibold sm:mt-4 sm:text-3xl">Nimil Zubair</h2>
                       <p className="mt-1.5 text-sm text-[color:var(--muted)] sm:mt-2 sm:text-base">Software Developer · Full-Stack · Blockchain</p>
                     </div>
-                    <div className="hidden rounded-2xl border px-3 py-2 text-right text-xs text-[color:var(--muted)] sm:block">
-                      Available for
-                      <br />
-                      opportunities
+                    <div className="availability-badge hidden sm:block">
+                      Open to Work
                     </div>
                   </div>
 
@@ -483,7 +481,7 @@ export default function Home() {
                     <p>nimilzubair1@gmail.com</p>
                   </div>
 
-                  <div className="mt-4 hidden rounded-3xl border p-4 sm:mt-6 sm:block lg:mt-5">
+                  <div className="mt-4 rounded-3xl border p-4 sm:mt-6 lg:mt-5">
                     <div className="text-sm uppercase tracking-[0.2em] text-[color:var(--muted)]">Core Focus</div>
                     <div className="mt-3 space-y-2.5">
                       {[
@@ -659,9 +657,9 @@ export default function Home() {
 
           <div id="contact" className="fade-up callout-panel p-6 sm:p-10" style={{ animationDelay: "0.1s" }}>
             <SectionLabel>Contact</SectionLabel>
-            <h2 className="mt-4 max-w-2xl text-2xl font-semibold sm:text-4xl">Let&apos;s talk about internships, freelance work, or a product idea.</h2>
+            <h2 className="mt-4 max-w-2xl text-2xl font-semibold sm:text-4xl">Let&apos;s talk about internships, full-time jobs, freelance work, or a product idea.</h2>
             <p className="mt-4 max-w-2xl leading-8 text-[color:var(--muted)]">
-              I&apos;m open to opportunities where I can build reliable software, learn quickly, and contribute across the stack.
+              I&apos;m open to internship and job opportunities where I can build reliable software, learn quickly, and contribute across the stack.
             </p>
 
             <div className="mt-8 flex flex-wrap gap-4">
