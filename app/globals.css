@@ -306,12 +306,12 @@ section {
 
 .profile-flip-wrap {
   perspective: 1400px;
-  min-height: 27rem;
+  min-height: clamp(20rem, 50vh, 23rem);
 }
 
 .profile-flip-inner {
   position: relative;
-  min-height: 27rem;
+  min-height: clamp(20rem, 50vh, 23rem);
   transform-style: preserve-3d;
   transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
 }

@@ -409,20 +409,20 @@ export default function Home() {
         </div>
       </header>
 
-      <section id="top" className="mx-auto flex min-h-[98svh] max-w-6xl items-start px-5 pb-4 pt-11 sm:min-h-screen sm:items-center sm:px-6 sm:pb-20 sm:pt-28 lg:px-8">
-        <div className="grid w-full items-center gap-5 sm:gap-10 lg:grid-cols-[1.2fr_0.8fr]">
-          <div className="space-y-4 sm:space-y-8">
+      <section id="top" className="mx-auto flex min-h-[98svh] max-w-6xl items-start px-5 pb-4 pt-11 sm:min-h-[calc(100svh-88px)] sm:items-center sm:px-6 sm:py-8 lg:px-8">
+        <div className="grid w-full items-center gap-5 sm:gap-8 lg:grid-cols-[1.2fr_0.8fr] lg:gap-9">
+          <div className="space-y-4 sm:space-y-6 lg:space-y-5">
             <div className="fade-up inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs text-[color:var(--muted)] sm:px-4 sm:py-2 sm:text-sm" style={{ animationDelay: "0.05s" }}>
               <span className="pulse-dot" />
               Software Developer · Karachi, Pakistan
             </div>
 
-            <div className="space-y-3 sm:space-y-5">
+            <div className="space-y-3 sm:space-y-4 lg:space-y-3">
               <SectionLabel>Software Developer</SectionLabel>
-              <h1 className="fade-up max-w-4xl text-[1.95rem] font-semibold tracking-tight leading-[1.05] sm:text-6xl lg:text-7xl" style={{ animationDelay: "0.1s" }}>
+              <h1 className="fade-up max-w-4xl text-[1.95rem] font-semibold tracking-tight leading-[1.05] sm:text-5xl lg:text-6xl" style={{ animationDelay: "0.1s" }}>
                 Building polished web products, AI prototypes, and blockchain systems.
               </h1>
-              <p className="fade-up max-w-2xl text-sm leading-6 text-[color:var(--muted)] sm:text-lg sm:leading-8" style={{ animationDelay: "0.2s" }}>
+              <p className="fade-up max-w-2xl text-sm leading-6 text-[color:var(--muted)] sm:text-base sm:leading-7" style={{ animationDelay: "0.2s" }}>
                 I&apos;m Nimil Zubair, a FAST-NUCES computer science student with hands-on experience in Next.js, .NET Core, Python, and Ethereum.
               </p>
             </div>
@@ -450,7 +450,7 @@ export default function Home() {
             </div>
           </div>
 
-          <aside className="fade-up hero-card mt-[-0.25rem] p-4 sm:mt-0 sm:p-8" style={{ animationDelay: "0.2s" }}>
+          <aside className="fade-up hero-card mt-[-0.25rem] p-4 sm:mt-0 sm:p-6 lg:p-5" style={{ animationDelay: "0.2s" }}>
             <button
               type="button"
               className="flip-toggle"
@@ -461,7 +461,7 @@ export default function Home() {
               {isProfileFlipped ? "Show profile" : "Flip to image"}
             </button>
 
-            <div className="profile-flip-wrap mt-3 sm:mt-4">
+            <div className="profile-flip-wrap mt-3 sm:mt-4 lg:mt-3">
               <div className={`profile-flip-inner ${isProfileFlipped ? "is-flipped" : ""}`}>
                 <div className="profile-face profile-front">
                   <div className="flex items-start justify-between gap-4">
@@ -477,15 +477,15 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className="mt-4 space-y-1.5 text-xs text-[color:var(--muted)] sm:mt-8 sm:space-y-3 sm:text-sm">
+                  <div className="mt-4 space-y-1.5 text-xs text-[color:var(--muted)] sm:mt-6 sm:space-y-2.5 sm:text-sm lg:mt-5">
                     <p>FAST-NUCES Karachi · Expected June 2026</p>
                     <p>Karachi, Pakistan</p>
                     <p>nimilzubair1@gmail.com</p>
                   </div>
 
-                  <div className="mt-4 hidden rounded-3xl border p-4 sm:mt-8 sm:block">
+                  <div className="mt-4 hidden rounded-3xl border p-4 sm:mt-6 sm:block lg:mt-5">
                     <div className="text-sm uppercase tracking-[0.2em] text-[color:var(--muted)]">Core Focus</div>
-                    <div className="mt-4 space-y-3">
+                    <div className="mt-3 space-y-2.5">
                       {[
                         "Production Next.js and React interfaces",
                         "RESTful APIs and backend services",
