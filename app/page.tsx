@@ -142,6 +142,8 @@ export default function Home() {
   const [theme, setTheme] = useState<"dark" | "light">("dark");
   const [activeProjectIndex, setActiveProjectIndex] = useState(0);
   const [isProfileFlipped, setIsProfileFlipped] = useState(false);
+  const [isCompactViewport, setIsCompactViewport] = useState(false);
+  const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
   const projectsSectionRef = useRef<HTMLElement | null>(null);
   const scrollLockTimestampRef = useRef(0);
   const touchStartYRef = useRef<number | null>(null);
@@ -159,6 +161,31 @@ export default function Home() {
   }, [theme]);
 
   useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 1023px)");
+
+    const syncViewportMode = () => {
+      setIsCompactViewport(mediaQuery.matches);
+    };
+
+    syncViewportMode();
+    mediaQuery.addEventListener("change", syncViewportMode);
+
+    return () => {
+      mediaQuery.removeEventListener("change", syncViewportMode);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isCompactViewport) {
+      setIsMobileNavOpen(false);
+    }
+  }, [isCompactViewport]);
+
+  useEffect(() => {
+    if (isCompactViewport) {
+      return;
+    }
+
     const isProjectsSectionLocked = () => {
       const section = projectsSectionRef.current;
       if (!section) {
@@ -166,7 +193,8 @@ export default function Home() {
       }
 
       const rect = section.getBoundingClientRect();
-      return rect.top <= 120 && rect.bottom >= window.innerHeight - 120;
+      const lockInset = Math.min(140, Math.max(84, window.innerHeight * 0.15));
+      return rect.top <= lockInset && rect.bottom >= window.innerHeight - lockInset;
     };
 
     const navigateProjectsByDirection = (direction: number) => {
@@ -262,7 +290,45 @@ export default function Home() {
       window.removeEventListener("touchmove", onTouchMove);
       window.removeEventListener("keydown", onKeyDown);
     };
-  }, []);
+  }, [isCompactViewport]);
+
+  useEffect(() => {
+    if (isCompactViewport) {
+      return;
+    }
+
+    let intervalId: number | null = null;
+    const section = projectsSectionRef.current;
+
+    if (!section) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && intervalId === null) {
+          intervalId = window.setInterval(() => {
+            setActiveProjectIndex((current) => (current + 1) % projects.length);
+          }, 5800);
+        }
+
+        if (!entry.isIntersecting && intervalId !== null) {
+          window.clearInterval(intervalId);
+          intervalId = null;
+        }
+      },
+      { threshold: 0.52 },
+    );
+
+    observer.observe(section);
+
+    return () => {
+      observer.disconnect();
+      if (intervalId !== null) {
+        window.clearInterval(intervalId);
+      }
+    };
+  }, [isCompactViewport]);
 
   const activeProject = projects[activeProjectIndex];
   const projectCountLabel = `${String(activeProjectIndex + 1).padStart(2, "0")} / ${String(projects.length).padStart(2, "0")}`;
@@ -290,7 +356,18 @@ export default function Home() {
             ))}
           </nav>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <button
+              type="button"
+              className="inline-flex h-9 w-9 flex-col justify-center gap-1 rounded-full border border-[color:var(--border)] bg-[color:var(--surface)] px-2.5 text-[color:var(--foreground)] md:hidden"
+              onClick={() => setIsMobileNavOpen((current) => !current)}
+              aria-expanded={isMobileNavOpen}
+              aria-controls="mobile-nav-panel"
+              aria-label="Toggle navigation menu"
+            >
+              <span className="block h-[1.5px] w-full rounded-full bg-current" />
+              <span className="block h-[1.5px] w-full rounded-full bg-current" />
+            </button>
             <button type="button" onClick={() => setTheme(theme === "dark" ? "light" : "dark")} className="theme-toggle" aria-label="Toggle dark and light theme">
               <span className="theme-toggle-icon" aria-hidden="true">
                 {theme === "dark" ? (
@@ -310,36 +387,56 @@ export default function Home() {
             </a>
           </div>
         </div>
+
+        <div
+          id="mobile-nav-panel"
+          className={`fixed left-3 right-3 top-[4.45rem] z-[70] rounded-2xl border border-[color:var(--border)] bg-[color:var(--surface-strong)]/95 p-2 shadow-2xl backdrop-blur-lg transition-all duration-200 md:hidden ${
+            isMobileNavOpen ? "pointer-events-auto translate-y-0 opacity-100" : "pointer-events-none -translate-y-2 opacity-0"
+          }`}
+        >
+          <nav className="grid gap-2" aria-label="Mobile navigation links">
+            {navLinks.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                className="block rounded-xl border border-[color:var(--border)] bg-[color:var(--surface)] px-3 py-2 text-sm text-[color:var(--foreground)]"
+                onClick={() => setIsMobileNavOpen(false)}
+              >
+                {link.label}
+              </a>
+            ))}
+          </nav>
+        </div>
       </header>
 
-      <section id="top" className="mx-auto flex min-h-screen max-w-6xl items-center px-5 pb-20 pt-28 sm:px-6 lg:px-8">
-        <div className="grid w-full items-center gap-10 lg:grid-cols-[1.2fr_0.8fr]">
-          <div className="space-y-8">
-            <div className="fade-up inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm text-[color:var(--muted)]" style={{ animationDelay: "0.05s" }}>
+      <section id="top" className="mx-auto flex min-h-[98svh] max-w-6xl items-start px-5 pb-4 pt-11 sm:min-h-screen sm:items-center sm:px-6 sm:pb-20 sm:pt-28 lg:px-8">
+        <div className="grid w-full items-center gap-5 sm:gap-10 lg:grid-cols-[1.2fr_0.8fr]">
+          <div className="space-y-4 sm:space-y-8">
+            <div className="fade-up inline-flex items-center gap-2 rounded-full border px-3 py-1.5 text-xs text-[color:var(--muted)] sm:px-4 sm:py-2 sm:text-sm" style={{ animationDelay: "0.05s" }}>
               <span className="pulse-dot" />
               Software Developer · Karachi, Pakistan
             </div>
 
-            <div className="space-y-5">
+            <div className="space-y-3 sm:space-y-5">
               <SectionLabel>Software Developer</SectionLabel>
-              <h1 className="fade-up max-w-4xl text-5xl font-semibold tracking-tight sm:text-6xl lg:text-7xl" style={{ animationDelay: "0.1s" }}>
+              <h1 className="fade-up max-w-4xl text-[1.95rem] font-semibold tracking-tight leading-[1.05] sm:text-6xl lg:text-7xl" style={{ animationDelay: "0.1s" }}>
                 Building polished web products, AI prototypes, and blockchain systems.
               </h1>
-              <p className="fade-up max-w-2xl text-lg leading-8 text-[color:var(--muted)]" style={{ animationDelay: "0.2s" }}>
+              <p className="fade-up max-w-2xl text-sm leading-6 text-[color:var(--muted)] sm:text-lg sm:leading-8" style={{ animationDelay: "0.2s" }}>
                 I&apos;m Nimil Zubair, a FAST-NUCES computer science student with hands-on experience in Next.js, .NET Core, Python, and Ethereum.
               </p>
             </div>
 
-            <div className="fade-up flex flex-wrap gap-4" style={{ animationDelay: "0.25s" }}>
-              <a href="#projects" className="primary-button">
+            <div className="fade-up flex flex-wrap gap-2.5 sm:gap-4" style={{ animationDelay: "0.25s" }}>
+              <a href="#projects" className="primary-button text-sm sm:text-base">
                 View Projects
               </a>
-              <a href="mailto:nimilzubair1@gmail.com" className="secondary-button">
+              <a href="mailto:nimilzubair1@gmail.com" className="secondary-button text-sm sm:text-base">
                 Email Me
               </a>
             </div>
 
-            <div className="fade-up grid gap-4 sm:grid-cols-3" style={{ animationDelay: "0.3s" }}>
+            <div className="fade-up hidden gap-4 sm:grid sm:grid-cols-3" style={{ animationDelay: "0.3s" }}>
               {[
                 { value: "3.2", label: "CGPA" },
                 { value: "2", label: "Work roles" },
@@ -353,7 +450,7 @@ export default function Home() {
             </div>
           </div>
 
-          <aside className="fade-up hero-card p-8" style={{ animationDelay: "0.2s" }}>
+          <aside className="fade-up hero-card mt-[-0.25rem] p-4 sm:mt-0 sm:p-8" style={{ animationDelay: "0.2s" }}>
             <button
               type="button"
               className="flip-toggle"
@@ -364,29 +461,29 @@ export default function Home() {
               {isProfileFlipped ? "Show profile" : "Flip to image"}
             </button>
 
-            <div className="profile-flip-wrap mt-4">
+            <div className="profile-flip-wrap mt-3 sm:mt-4">
               <div className={`profile-flip-inner ${isProfileFlipped ? "is-flipped" : ""}`}>
                 <div className="profile-face profile-front">
                   <div className="flex items-start justify-between gap-4">
                     <div>
                       <SectionLabel>Profile</SectionLabel>
-                      <h2 className="mt-4 text-3xl font-semibold">Nimil Zubair</h2>
-                      <p className="mt-2 text-[color:var(--muted)]">Software Developer · Full-Stack · Blockchain</p>
+                      <h2 className="mt-3 text-2xl font-semibold sm:mt-4 sm:text-3xl">Nimil Zubair</h2>
+                      <p className="mt-1.5 text-sm text-[color:var(--muted)] sm:mt-2 sm:text-base">Software Developer · Full-Stack · Blockchain</p>
                     </div>
-                    <div className="rounded-2xl border px-3 py-2 text-right text-xs text-[color:var(--muted)]">
+                    <div className="hidden rounded-2xl border px-3 py-2 text-right text-xs text-[color:var(--muted)] sm:block">
                       Available for
                       <br />
                       opportunities
                     </div>
                   </div>
 
-                  <div className="mt-8 space-y-3 text-sm text-[color:var(--muted)]">
+                  <div className="mt-4 space-y-1.5 text-xs text-[color:var(--muted)] sm:mt-8 sm:space-y-3 sm:text-sm">
                     <p>FAST-NUCES Karachi · Expected June 2026</p>
                     <p>Karachi, Pakistan</p>
                     <p>nimilzubair1@gmail.com</p>
                   </div>
 
-                  <div className="mt-8 rounded-3xl border p-4">
+                  <div className="mt-4 hidden rounded-3xl border p-4 sm:mt-8 sm:block">
                     <div className="text-sm uppercase tracking-[0.2em] text-[color:var(--muted)]">Core Focus</div>
                     <div className="mt-4 space-y-3">
                       {[
@@ -412,11 +509,11 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="about" className="mx-auto max-w-6xl px-5 py-20 sm:px-6 lg:px-8">
+      <section id="about" className="mx-auto max-w-6xl px-5 py-12 sm:px-6 sm:py-20 lg:px-8">
         <div className="grid gap-6 lg:grid-cols-[0.95fr_1.05fr]">
-          <div className="fade-up glass-panel p-8" style={{ animationDelay: "0.05s" }}>
+          <div className="fade-up glass-panel p-6 sm:p-8" style={{ animationDelay: "0.05s" }}>
             <SectionLabel>About</SectionLabel>
-            <h2 className="mt-4 text-3xl font-semibold">A practical builder with a broad stack</h2>
+            <h2 className="mt-4 text-2xl font-semibold sm:text-3xl">A practical builder with a broad stack</h2>
             <p className="mt-5 leading-8 text-[color:var(--muted)]">
               My resume shows a mix of freelance delivery, internship work, and technical projects across web, blockchain, machine learning, and compiler design. I like solving end-to-end problems and shipping work that feels deliberate, not generic.
             </p>
@@ -432,9 +529,9 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="fade-up glass-panel p-8" style={{ animationDelay: "0.12s" }}>
+          <div className="fade-up glass-panel p-6 sm:p-8" style={{ animationDelay: "0.12s" }}>
             <SectionLabel>Skills</SectionLabel>
-            <h2 className="mt-4 text-3xl font-semibold">Languages, frameworks, and platforms</h2>
+            <h2 className="mt-4 text-2xl font-semibold sm:text-3xl">Languages, frameworks, and platforms</h2>
             <div className="mt-6 flex flex-wrap gap-3">
               {skills.map((skill) => (
                 <span key={skill} className="skill-pill">
@@ -443,7 +540,7 @@ export default function Home() {
               ))}
             </div>
 
-            <div className="mt-8 grid gap-3 sm:grid-cols-3">
+            <div className="mt-8 hidden gap-3 sm:grid sm:grid-cols-3">
               {[
                 "Next.js",
                 ".NET Core",
@@ -461,10 +558,10 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="experience" className="mx-auto max-w-6xl px-5 py-20 sm:px-6 lg:px-8">
+      <section id="experience" className="mx-auto max-w-6xl px-5 py-12 sm:px-6 sm:py-20 lg:px-8">
         <div className="fade-up mb-10" style={{ animationDelay: "0.05s" }}>
           <SectionLabel>Experience</SectionLabel>
-          <h2 className="mt-4 text-3xl font-semibold sm:text-4xl">Recent roles</h2>
+          <h2 className="mt-4 text-2xl font-semibold sm:text-4xl">Recent roles</h2>
         </div>
 
         <div className="grid gap-4">
@@ -483,20 +580,17 @@ export default function Home() {
         </div>
       </section>
 
-      <section id="projects" ref={projectsSectionRef} className="project-scroll-section mx-auto max-w-6xl px-5 py-20 sm:px-6 lg:px-8">
+      <section id="projects" ref={projectsSectionRef} className="project-scroll-section mx-auto max-w-6xl px-5 py-12 sm:px-6 sm:py-20 lg:px-8">
         <div className="project-sticky-wrap">
           <div className="fade-up mb-10" style={{ animationDelay: "0.05s" }}>
             <SectionLabel>Projects</SectionLabel>
-            <div className="mt-4 flex flex-wrap items-end justify-between gap-4">
+            <div className="project-head-shell mt-4 flex flex-wrap items-center justify-between gap-3">
               <span className="project-counter">{projectCountLabel}</span>
             </div>
-            <p className="mt-3 max-w-2xl text-[color:var(--muted)]">
-              While this section is active, scroll or click next to move through projects one by one.
-            </p>
           </div>
 
           <div className="grid gap-6 lg:grid-cols-[0.35fr_0.65fr]">
-            <div className="space-y-2">
+            <div className="hidden space-y-2 lg:block">
               {projects.map((project, index) => (
                 <button
                   key={project.title}
@@ -511,11 +605,11 @@ export default function Home() {
               ))}
             </div>
 
-            <article key={activeProject.title} className="project-card project-active-card p-7 sm:p-8">
+            <article key={activeProject.title} className="project-card project-active-card p-6 sm:p-8">
               <div className={`h-1.5 w-28 rounded-full bg-gradient-to-r ${activeProject.accent}`} />
               <div className="mt-5 text-sm uppercase tracking-[0.18em] text-[color:var(--muted)]">{activeProject.category}</div>
-              <h3 className="mt-3 text-3xl font-semibold">{activeProject.title}</h3>
-              <p className="mt-4 leading-8 text-[color:var(--muted)]">{activeProject.description}</p>
+              <h3 className="mt-3 text-2xl font-semibold sm:text-3xl">{activeProject.title}</h3>
+              <p className="mt-4 leading-7 text-[color:var(--muted)] sm:leading-8">{activeProject.description}</p>
 
               <div className="mt-6 flex flex-wrap gap-2">
                 {activeProject.tech.map((tech) => (
@@ -548,11 +642,11 @@ export default function Home() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-5 py-20 sm:px-6 lg:px-8">
+      <section className="mx-auto max-w-6xl px-5 py-12 sm:px-6 sm:py-20 lg:px-8">
         <div className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
-          <div className="fade-up glass-panel p-8" style={{ animationDelay: "0.05s" }}>
+          <div className="fade-up glass-panel p-6 sm:p-8" style={{ animationDelay: "0.05s" }}>
             <SectionLabel>Achievements</SectionLabel>
-            <h2 className="mt-4 text-3xl font-semibold">Recognition and leadership</h2>
+            <h2 className="mt-4 text-2xl font-semibold sm:text-3xl">Recognition and leadership</h2>
             <div className="mt-6 space-y-3">
               {achievements.map((item) => (
                 <div key={item} className="flex items-start gap-3 rounded-2xl border px-4 py-3">
@@ -563,9 +657,9 @@ export default function Home() {
             </div>
           </div>
 
-          <div id="contact" className="fade-up callout-panel p-8 sm:p-10" style={{ animationDelay: "0.1s" }}>
+          <div id="contact" className="fade-up callout-panel p-6 sm:p-10" style={{ animationDelay: "0.1s" }}>
             <SectionLabel>Contact</SectionLabel>
-            <h2 className="mt-4 max-w-2xl text-3xl font-semibold sm:text-4xl">Let&apos;s talk about internships, freelance work, or a product idea.</h2>
+            <h2 className="mt-4 max-w-2xl text-2xl font-semibold sm:text-4xl">Let&apos;s talk about internships, freelance work, or a product idea.</h2>
             <p className="mt-4 max-w-2xl leading-8 text-[color:var(--muted)]">
               I&apos;m open to opportunities where I can build reliable software, learn quickly, and contribute across the stack.
             </p>

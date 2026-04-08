@@ -109,6 +109,71 @@ section {
   background: color-mix(in srgb, var(--background) 76%, transparent);
 }
 
+.mobile-nav-toggle {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.25rem;
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  background: var(--surface);
+  height: 2.5rem;
+  width: 2.5rem;
+  padding-inline: 0.66rem;
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.mobile-nav-toggle:hover {
+  transform: translateY(-2px);
+  border-color: color-mix(in srgb, var(--accent) 56%, var(--border));
+}
+
+.mobile-nav-line {
+  display: block;
+  width: 100%;
+  height: 1.5px;
+  border-radius: 9999px;
+  background: var(--foreground);
+}
+
+.mobile-nav-panel {
+  position: fixed;
+  top: 4.85rem;
+  left: 0.7rem;
+  right: 0.7rem;
+  z-index: 60;
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  background: color-mix(in srgb, var(--surface-strong) 90%, transparent);
+  backdrop-filter: blur(18px);
+  box-shadow: var(--shadow);
+  opacity: 0;
+  transform: translateY(-0.55rem) scale(0.985);
+  pointer-events: none;
+  transition: opacity 0.24s ease, transform 0.24s ease;
+}
+
+.mobile-nav-panel.is-open {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.mobile-nav-list {
+  display: grid;
+  gap: 0.5rem;
+  padding: 0.7rem;
+}
+
+.mobile-nav-link {
+  border: 1px solid var(--border);
+  border-radius: 0.85rem;
+  background: color-mix(in srgb, var(--surface) 85%, transparent);
+  color: var(--foreground);
+  padding: 0.66rem 0.85rem;
+  font-size: 0.9rem;
+}
+
 .brand-mark {
   position: relative;
   display: inline-flex;
@@ -379,6 +444,63 @@ section {
   letter-spacing: 0.12em;
 }
 
+.project-head-shell {
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 0.75rem;
+  background:
+    linear-gradient(120deg, color-mix(in srgb, var(--accent) 14%, transparent), transparent 50%),
+    color-mix(in srgb, var(--surface) 86%, transparent);
+}
+
+.project-mode-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, var(--border));
+  background: color-mix(in srgb, var(--surface-strong) 84%, transparent);
+  padding: 0.4rem 0.78rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.project-chip-strip {
+  margin-top: 0.65rem;
+  display: flex;
+  gap: 0.55rem;
+  overflow-x: auto;
+  padding: 0.1rem 0.1rem 0.35rem;
+  scrollbar-width: none;
+}
+
+.project-chip-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.project-chip {
+  flex: 0 0 auto;
+  max-width: 15rem;
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  padding: 0.52rem 0.9rem;
+  background: color-mix(in srgb, var(--surface) 74%, transparent);
+  color: var(--muted);
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-size: 0.84rem;
+  transition: border-color 0.25s ease, color 0.25s ease, background-color 0.25s ease;
+}
+
+.project-chip.is-active {
+  color: var(--foreground);
+  border-color: color-mix(in srgb, var(--accent) 58%, var(--border));
+  background: color-mix(in srgb, var(--surface-strong) 88%, transparent);
+}
+
 .project-nav-item {
   width: 100%;
   display: flex;
@@ -425,6 +547,19 @@ section {
 .project-step-button:disabled {
   opacity: 0.45;
   cursor: not-allowed;
+}
+
+@media (pointer: coarse) {
+  .mobile-nav-toggle:hover,
+  .theme-toggle:hover,
+  .cta-link:hover,
+  .primary-button:hover,
+  .secondary-button:hover,
+  .icon-link:hover,
+  .project-step-button:hover:not(:disabled),
+  .project-nav-item:hover {
+    transform: none;
+  }
 }
 
 @keyframes fade-up {
@@ -487,6 +622,25 @@ section {
 }
 
 @media (max-width: 1023px) {
+  section {
+    scroll-margin-top: 104px;
+  }
+
+  .site-header {
+    background: color-mix(in srgb, var(--background) 86%, transparent);
+  }
+
+  .cta-link {
+    display: none;
+  }
+
+  .hero-card,
+  .glass-panel,
+  .project-card,
+  .callout-panel {
+    border-radius: 1.5rem;
+  }
+
   .project-scroll-section {
     min-height: auto;
   }
@@ -495,8 +649,122 @@ section {
     position: static;
   }
 
+  .project-nav-item {
+    border-radius: 0.85rem;
+    padding: 0.72rem 0.78rem;
+  }
+
   .profile-flip-wrap,
   .profile-flip-inner {
     min-height: 24rem;
+  }
+}
+
+@media (max-width: 767px) {
+  section {
+    scroll-margin-top: 76px;
+  }
+
+  .site-header {
+    border-bottom: 0;
+    backdrop-filter: blur(14px);
+  }
+
+  .brand-mark {
+    height: 3rem;
+    width: 3rem;
+  }
+
+  .bg-grid {
+    opacity: 0.12;
+    background-size: 34px 34px;
+  }
+
+  .orb-one,
+  .orb-two,
+  .orb-three {
+    filter: blur(72px);
+    opacity: 0.4;
+  }
+
+  .orb-one {
+    height: 13rem;
+    width: 13rem;
+  }
+
+  .orb-two {
+    height: 14rem;
+    width: 14rem;
+  }
+
+  .orb-three {
+    height: 11rem;
+    width: 11rem;
+    left: 18%;
+  }
+
+  .theme-toggle {
+    padding: 0.6rem 0.76rem;
+  }
+
+  .mobile-nav-toggle {
+    height: 2.3rem;
+    width: 2.3rem;
+    padding-inline: 0.58rem;
+  }
+
+  .mobile-nav-panel {
+    top: 4.3rem;
+  }
+
+  .section-label {
+    letter-spacing: 0.17em;
+    font-size: 0.68rem;
+  }
+
+  .stat-card {
+    border-radius: 1.15rem;
+  }
+
+  .project-counter {
+    min-width: 5.2rem;
+    font-size: 0.82rem;
+    letter-spacing: 0.1em;
+  }
+
+  .project-head-shell {
+    border-radius: 0.9rem;
+    padding: 0.58rem;
+  }
+
+  .project-mode-badge {
+    padding: 0.35rem 0.62rem;
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+  }
+
+  .project-chip {
+    max-width: 12.5rem;
+    font-size: 0.77rem;
+    padding: 0.45rem 0.75rem;
+  }
+
+  .project-step-button {
+    padding: 0.5rem 0.85rem;
+    font-size: 0.84rem;
+  }
+
+  .profile-flip-wrap,
+  .profile-flip-inner {
+    min-height: 19.25rem;
+  }
+
+  .profile-back {
+    border-radius: 1.2rem;
+  }
+
+  .icon-link {
+    height: 2.65rem;
+    width: 2.65rem;
   }
 }
