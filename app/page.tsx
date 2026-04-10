@@ -13,16 +13,25 @@ const navLinks = [
 const skills = [
   "Next.js",
   "React",
+  "FastAPI",
+  "Supabase",
   "C/C++",
   "C#",
   "Python",
   "Java",
   "SQL",
+  "Assembly",
   "Ethereum",
   "Solidity",
   "PostgreSQL",
+  "MySQL",
   "MongoDB",
   "SQL Server",
+  "Oracle",
+  "LangChain",
+  "ChromaDB",
+  "Ollama",
+  "MediaPipe",
 ];
 
 const experience = [
@@ -52,10 +61,18 @@ const projects = [
     accent: "from-cyan-400 to-violet-500",
   },
   {
+    title: "Film-Find",
+    category: "Movies Recommendation App",
+    description:
+      "Full-stack movie recommendation app with personalized feeds, user ratings, and a taste radar chart using content-based filtering and TMDB API integration.",
+    tech: ["React", "FastAPI", "Supabase"],
+    accent: "from-indigo-400 to-sky-500",
+  },
+  {
     title: "Prism",
     category: "AI Sign Language Recognition",
     description:
-      "Real-time communication assistant using a custom Transformer model, MediaPipe hand tracking, and a LangChain + ChromaDB + Ollama RAG pipeline.",
+      "Real-time communication assistant using a custom Transformer + LSTM model, MediaPipe hand tracking, and a LangChain + ChromaDB + Ollama RAG pipeline.",
     tech: ["Python", "LangChain", "ChromaDB"],
     accent: "from-emerald-400 to-cyan-500",
   },
@@ -74,14 +91,6 @@ const projects = [
       "Spam detection pipeline using Naive Bayes, SVM, Decision Tree, and hybrid models with TF-IDF and NLP feature engineering.",
     tech: ["Python", "ML", "NLP"],
     accent: "from-pink-400 to-rose-500",
-  },
-  {
-    title: "Complaint Management System",
-    category: "Full-Stack Application",
-    description:
-      "Complaint tracking system built with .NET C#, SQL Server, secure authentication, status filtering, and automated email notifications.",
-    tech: [".NET C#", "SQL Server", "Web API"],
-    accent: "from-violet-400 to-fuchsia-500",
   },
 ];
 
@@ -423,7 +432,7 @@ export default function Home() {
                 Building polished web products, AI prototypes, and blockchain systems.
               </h1>
               <p className="fade-up max-w-2xl text-sm leading-6 text-[color:var(--muted)] sm:text-base sm:leading-7" style={{ animationDelay: "0.2s" }}>
-                I&apos;m Nimil Zubair, a FAST-NUCES computer science student with hands-on experience in Next.js, .NET Core, Python, and Ethereum.
+                I&apos;m Nimil Zubair, a FAST-NUCES computer science student with hands-on experience building scalable web applications, RESTful APIs, and AI-integrated platforms.
               </p>
             </div>
 
@@ -513,7 +522,7 @@ export default function Home() {
             <SectionLabel>About</SectionLabel>
             <h2 className="mt-4 text-2xl font-semibold sm:text-3xl">A practical builder with a broad stack</h2>
             <p className="mt-5 leading-8 text-[color:var(--muted)]">
-              My resume shows a mix of freelance delivery, internship work, and technical projects across web, blockchain, machine learning, and compiler design. I like solving end-to-end problems and shipping work that feels deliberate, not generic.
+              My resume reflects a mix of freelance delivery, internship work, and technical projects across web, blockchain, machine learning, and compiler design. I enjoy solving real-world problems with clean, maintainable code and shipping products end to end.
             </p>
 
             <div className="mt-8 grid gap-3 sm:grid-cols-2">
@@ -666,7 +675,7 @@ export default function Home() {
               <a href="mailto:nimilzubair1@gmail.com" className="primary-button">
                 nimilzubair1@gmail.com
               </a>
-              <a href="https://www.linkedin.com/in/nimil-zubair-b4bb39296" target="_blank" rel="noopener noreferrer" className="secondary-button">
+              <a href="https://www.linkedin.com/in/nimil-zubair" target="_blank" rel="noopener noreferrer" className="secondary-button">
                 LinkedIn Profile
               </a>
             </div>
@@ -675,7 +684,7 @@ export default function Home() {
               <a href="https://github.com/nimilzubair" target="_blank" rel="noopener noreferrer" className="icon-link">
                 <SocialIcon type="github" />
               </a>
-              <a href="https://www.linkedin.com/in/nimil-zubair-b4bb39296" target="_blank" rel="noopener noreferrer" className="icon-link">
+              <a href="https://www.linkedin.com/in/nimil-zubair" target="_blank" rel="noopener noreferrer" className="icon-link">
                 <SocialIcon type="linkedin" />
               </a>
               <a href="mailto:nimilzubair1@gmail.com" className="icon-link">
